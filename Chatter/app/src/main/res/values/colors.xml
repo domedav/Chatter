@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--light theme-->
+    <color name="light_main">#00ACE0</color>
+    <color name="light_blue">#0C9EF7</color>
+    <color name="light_darkblue">#0C5CED</color>
+    <color name="light_teal">#0CF7D2</color>
+    <color name="light_green">#0CED8A</color>
+    <!--dark theme-->
+    <color name="dark_main">#245766</color>
+    <color name="dark_blue">#25527D</color>
+    <color name="dark_darkblue">#223673</color>
+    <color name="dark_teal">#257D7A</color>
+    <color name="dark_green">#227359</color>
+    <!--          -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="semitransparent_white">#59FFFFFF</color>
+    <color name="transparent">#0000</color>
+</resources>
