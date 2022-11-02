@@ -9,6 +9,7 @@
     android:background="@drawable/light_login_background_gradient_animator">
 
     <TextView
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
