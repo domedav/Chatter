@@ -2,14 +2,21 @@
     <string name="app_name" translatable="false">Chatter</string>
     <!-- Strings related to login -->
     <string name="prompt_username">Username</string>
+    <string name="prompt_username_explain">Only characters A-Z are allowed</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_email">Email/Tel (optional)</string>
     <string name="action_proceed">Continue</string>
-    <string name="invalid_username">Invalid username</string>
+    <string name="action_finish">Register</string>
+    <string name="invalid_username_tooshort">Username is too short</string>
+    <string name="invalid_username_toolong">Username is too long</string>
+    <string name="invalid_username_nonascii">Only letters and numbers are allowed</string>
     <string name="invalid_password">Password is too short</string>
     <string name="login_failed_misc">"Something went wrong…"</string>
     <string name="login_failed_network">"Check your internet connection, and try again."</string>
     <string name="login_failed_toomuchaccount">"You have created too many accounts this day, check back later."</string>
     <string name="login_greet">Welcome!</string>
     <string name="forgot_pass"><u>I Forgot My Password</u></string>
+    <string name="login_email_warn_caution">Consider adding valid information, otherwise you wont be able to recover your account if you forget your password.</string>
+    <string name="username_display">Your username is: @%s</string>
     <!--                          -->
 </resources>

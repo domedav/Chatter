@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--dark theme      -80 -->
+    <color name="main">#005C90</color>
+    <color name="blue">#0C4EA7</color>
+    <color name="darkblue">#0C2A9D</color>
+    <color name="teal">#0CA782</color>
+    <color name="green">#0C9D3A</color>
+    <color name="main_semitransparent">#40005C90</color>
+    <color name="outlining">#CDFFFFFF</color>
+    <color name="outlining_semitransparent">#59FFFFFF</color>
+    <color name="semitransparent_background">#59000000</color>
+    <color name="error">#FF7575</color>
+</resources>

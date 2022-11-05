@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:duration="10000" android:drawable="@drawable/dark_login_background_start"/>
-    <item android:duration="10000" android:drawable="@drawable/dark_login_background_mid"/>
-    <item android:duration="10000" android:drawable="@drawable/dark_login_background_end"/>
-    <item android:duration="10000" android:drawable="@drawable/dark_login_background_mid"/>
-</animation-list>

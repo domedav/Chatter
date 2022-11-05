@@ -1,0 +1,47 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen.IconBackground">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenBackground">@color/main</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/appsplash_shadow</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+    </style>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/main</item>
+        <item name="colorPrimaryVariant">@color/blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal</item>
+        <item name="colorSecondaryVariant">@color/darkblue</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+    <style name="EditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeWidth">1.4dp</item>
+        <item name="boxStrokeWidthFocused">1.4dp</item>
+        <item name="boxCornerRadiusBottomStart">25dp</item>
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+        <item name="boxCornerRadiusTopEnd">25dp</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="errorIconDrawable">@drawable/ic_twotone_error_round</item>
+        <item name="helperTextTextColor">@android:color/holo_red_light</item>
+        <item name="startIconTint">@color/outlining_semitransparent</item>
+        <item name="counterTextColor">@color/outlining_semitransparent</item>
+        <item name="counterOverflowTextColor">@color/error</item>
+        <item name="colorAccent">@color/outlining_semitransparent</item>
+        <item name="boxStrokeColor">@color/outlining</item>
+        <item name="hintTextColor">@color/outlining</item>
+        <item name="errorIconTint">@color/error</item>
+        <item name="errorTextColor">@color/error</item>
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/error</item>
+        <item name="boxStrokeErrorColor">@color/error</item>
+        <item name="colorErrorContainer">@color/error</item>
+        <item name="colorOnErrorContainer">@color/error</item>
+    </style>
+</resources>

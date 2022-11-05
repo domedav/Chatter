@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--light theme-->
-    <color name="light_main">#00ACE0</color>
-    <color name="light_blue">#0C9EF7</color>
-    <color name="light_darkblue">#0C5CED</color>
-    <color name="light_teal">#0CF7D2</color>
-    <color name="light_green">#0CED8A</color>
-    <!--dark theme-->
-    <color name="dark_main">#245766</color>
-    <color name="dark_blue">#25527D</color>
-    <color name="dark_darkblue">#223673</color>
-    <color name="dark_teal">#257D7A</color>
-    <color name="dark_green">#227359</color>
+    <color name="main">#00ACE0</color>
+    <color name="blue">#0C9EF7</color>
+    <color name="darkblue">#0C5CED</color>
+    <color name="teal">#0CF7D2</color>
+    <color name="green">#0CED8A</color>
+    <color name="main_semitransparent">#4000ACE0</color>
+    <color name="outlining">#CD000000</color>
+    <color name="outlining_semitransparent">#59000000</color>
+    <color name="semitransparent_background">#59FFFFFF</color>
+    <color name="error">#B10000</color>
     <!--          -->
-    <color name="black">#FF000000</color>
+    <color name="main_fixed">#00ACE0</color>
+    <color name="black">@android:color/black</color>
     <color name="shadow">#32000000</color>
     <color name="gray">#FF737373</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">@android:color/white</color>
     <color name="semitransparent_white">#59FFFFFF</color>
-    <color name="transparent">#0000</color>
+    <color name="transparent">@android:color/transparent</color>
+    <color name="appsplash_shadow">#05000000</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:ignore="PrivateResource">@color/outlining_semitransparent</color>
 </resources>

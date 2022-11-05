@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/loginmain"
+    android:id="@+id/loginemail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginActivity"
     android:background="@drawable/login_background_gradient_animator">
 
     <TextView
@@ -21,83 +20,70 @@
         android:textColor="@color/white"
         android:textSize="52sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/userContainer"
+        app:layout_constraintBottom_toTopOf="@+id/email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/EditText"
-        app:expandedHintEnabled="true"
-        android:id="@+id/userContainer"
+    <TextView
+        android:id="@+id/usernamedisplay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:text="@string/username_display"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="48dp"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toTopOf="@id/email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header"/>
+
+    <EditText
+        android:textColor="@color/white"
+        android:textColorHint="@color/semitransparent_white"
+        android:backgroundTint="@color/semitransparent_white"
+        android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="-55dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
+        android:autofillHints="username"
+        android:hint="@string/prompt_email"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:selectAllOnFocus="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:startIconDrawable="@drawable/ic_twotone_person"
-        app:endIconMode="none"
-        app:counterEnabled="true"
-        app:counterMaxLength="24">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/prompt_username"
-            android:importantForAutofill="yes"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/EditText"
-        app:expandedHintEnabled="true"
-        android:id="@+id/passContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userContainer"
-        app:startIconDrawable="@drawable/ic_twotone_password"
-        app:endIconMode="password_toggle">
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="@string/prompt_password"
-        android:imeOptions="actionDone"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
-        android:selectAllOnFocus="true"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/finishlogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
-        android:enabled="false"
+        android:enabled="true"
         android:minWidth="175dp"
-        android:text="@string/action_proceed"
+        android:text="@string/action_finish"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passContainer" />
+        app:layout_constraintTop_toBottomOf="@+id/email" />
 
-    <Button
-        android:id="@+id/passforgot"
+    <TextView
+        android:padding="18dp"
+        android:id="@+id/login_warn_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -105,13 +91,15 @@
         android:layout_marginEnd="16dp"
         android:background="@color/transparent"
         android:gravity="center"
-        android:text="@string/forgot_pass"
+        android:text="@string/login_email_warn_caution"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/green"
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login"
+        app:layout_constraintTop_toBottomOf="@+id/finishlogin"
         tools:ignore="TextContrastCheck" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,34 +1,46 @@
 package com.domedav.chatter.ui.login;
-
-import android.app.Activity;
-import android.content.res.Configuration;
+import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
+import com.domedav.DataManager;
 import com.domedav.chatter.R;
 import com.domedav.chatter.databinding.ActivityLoginBinding;
+import com.domedav.chatter.ui.login.credentials.CredentialValidator;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.core.content.ContextCompat;
+import androidx.core.splashscreen.SplashScreen;
+
+import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
+    private boolean CanUndo = false;
+    EditText usernameEditText;
+    EditText passwordEditText;
+    Button loginButton;
+
+    private boolean passwordError = true;
+    private boolean usernameError = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,49 +51,47 @@ public class LoginActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND, WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);    //toggle if theres info which shouldnt be shared (eg: visible password)
-
+        SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(LoginViewModel.class);
 
-        final EditText usernameEditText = binding.username;
-        final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.login;
-        //final ProgressBar loadingProgressBar = binding.loading;
+        loginButton = binding.login;
+        passwordEditText = binding.password;
+        usernameEditText = binding.username;
 
-        loginViewModel.getLoginFormState().observe(this, loginFormState -> {
-            if (loginFormState == null || usernameEditText.getText().length() <= 0 || passwordEditText.getText().length() <= 0) {
-                return;
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                if(CanUndo)
+                {
+                    CanUndo = false;
+                    setContentView(binding.getRoot());
+                    CredentialValidator.GoodForProceed_Username = false;
+                    CredentialValidator.GoodForProceed_Password = false;
+                    usernameEditText.setText(DataManager.GetData_String(getApplicationContext(), "Login", "usernameEditText_restore_data"));
+                    ValidateUsername(binding.userContainer, DataManager.GetData_String(getApplicationContext(), "Login", "usernameEditText_restore_data"));
+                    return;
+                }
+                finish();
             }
-            loginButton.setEnabled(loginFormState.isDataValid());
-            if (loginFormState.getUsernameError() != null) {
-                usernameEditText.setError(getString(loginFormState.getUsernameError()));
-            }
-            if (loginFormState.getPasswordError() != null) {
-                passwordEditText.setError(getString(loginFormState.getPasswordError()));
-            }
-        });
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
-        loginViewModel.getLoginResult().observe(this, loginResult -> {
-            if (loginResult == null) {
-                return;
-            }
-            //loadingProgressBar.setVisibility(View.GONE);
-            if (loginResult.getError() != null) {
-                showLoginFailed(loginResult.getError());
-            }
-            if (loginResult.getSuccess() != null) {
-                updateUiWithUser(loginResult.getSuccess());
-            }
-            setResult(Activity.RESULT_OK);
+        usernameEditText.setText(DataManager.GetData_String(this, "Login", "usernameEditText_restore_data"));
+        ValidateUsername(binding.userContainer, DataManager.GetData_String(this, "Login", "usernameEditText_restore_data"));
+        InitEvents();
 
-            //Complete and destroy login activity once successful
-            //finish();
-            //TODO: switch to chat activity, with anim
-        });
+        //anim bg
+        AnimationDrawable animationDrawable = (AnimationDrawable) findViewById(R.id.loginmain).getBackground();
+        animationDrawable.setEnterFadeDuration(0);
+        animationDrawable.setExitFadeDuration(6000);
+        animationDrawable.start();
+    }
 
-        TextWatcher afterTextChangedListener = new TextWatcher() {
+    private void InitEvents(){
+
+        usernameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // ignore
@@ -94,47 +104,94 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                ValidateUsername(binding.userContainer, s.toString());
+
+                ColorStateList csl = ContextCompat.getColorStateList(getApplicationContext(), usernameError ? R.color.outlining : R.color.error);
+                binding.userContainer.setStartIconTintList(csl);
+                binding.userContainer.setCounterTextColor(csl);
+                binding.userContainer.setEndIconTintList(csl);
             }
-        };
-        usernameEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+        });
+
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // ignore
             }
-            return false;
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // ignore
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                CredentialValidator.GoodForProceed_Password = CredentialValidator.ValidatePasswordLength(s.toString().length());
+                binding.passContainer.setError(CredentialValidator.GoodForProceed_Password ? null : getString(R.string.invalid_password));
+                passwordError = CredentialValidator.GoodForProceed_Password;
+
+                ColorStateList csl = ContextCompat.getColorStateList(getApplicationContext(), passwordError ? R.color.outlining : R.color.error);
+                binding.passContainer.setStartIconTintList(csl);
+                binding.passContainer.setCounterTextColor(csl);
+                binding.passContainer.setEndIconTintList(csl);
+
+                UpdateLoginButton();
+            }
+        });
+
+        usernameEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            ColorStateList csl = ContextCompat.getColorStateList(getApplicationContext(), usernameError ? (hasFocus ? R.color.outlining : R.color.outlining_semitransparent) : R.color.error);
+            binding.userContainer.setStartIconTintList(csl);
+            binding.userContainer.setCounterTextColor(csl);
+            binding.userContainer.setEndIconTintList(csl);
+        });
+
+        passwordEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            ColorStateList csl = ContextCompat.getColorStateList(getApplicationContext(), passwordError ? (hasFocus ? R.color.outlining : R.color.outlining_semitransparent) : R.color.error);
+            binding.passContainer.setStartIconTintList(csl);
+            binding.passContainer.setCounterTextColor(csl);
+            binding.passContainer.setEndIconTintList(csl);
+            binding.passContainer.setHintTextColor(csl);
         });
 
         loginButton.setOnClickListener(v -> {
-            //loadingProgressBar.setVisibility(View.VISIBLE);
-            loginViewModel.login(usernameEditText.getText().toString(),
-                    passwordEditText.getText().toString());
+            //login
+            setContentView(R.layout.activity_login_email);
+            ((TextView)findViewById(R.id.usernamedisplay)).setText(getString(R.string.username_display, usernameEditText.getText().toString()));
+            CanUndo = true;
+            DataManager.SetData(this, "Login", "usernameEditText_restore_data", usernameEditText.getText().toString());
         });
-        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
-        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-        //anim bg
-        AnimationDrawable animationDrawable = (AnimationDrawable)((ConstraintLayout)findViewById(R.id.loginmain)).getBackground();
-        animationDrawable.setEnterFadeDuration(0);
-        animationDrawable.setExitFadeDuration(6000);
-        animationDrawable.start();
-        //
-        if((getApplicationContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
+    }
+
+    private void UpdateLoginButton(){
+        binding.login.setEnabled(CredentialValidator.GoodForProceed_Password && CredentialValidator.GoodForProceed_Username);
+    }
+
+    private void ValidateUsername(TextInputLayout usernameEditText, String username){
+        CredentialValidator.LoginUsernameErrorType errorType = CredentialValidator.ValidateUsername(username);
+        switch (errorType)
         {
-            binding.loginmain.setBackgroundResource(R.drawable.dark_login_background_gradient_animator);
-            binding.passforgot.setTextColor(getResources().getColor(R.color.dark_green));
+            case username_short:
+                usernameEditText.setError(getString(R.string.invalid_username_tooshort));
+                CredentialValidator.GoodForProceed_Username = false;
+                usernameError = false;
+                break;
+            case username_long:
+                usernameEditText.setError(getString(R.string.invalid_username_toolong));
+                CredentialValidator.GoodForProceed_Username = false;
+                usernameError = false;
+                break;
+            case username_invalid:
+                usernameEditText.setError(getString(R.string.invalid_username_nonascii));
+                CredentialValidator.GoodForProceed_Username = false;
+                usernameError = false;
+                break;
+            case ignore:
+                usernameEditText.setError(null);
+                CredentialValidator.GoodForProceed_Username = true;
+                usernameError = true;
+                break;
         }
-    }
-
-    private void updateUiWithUser(@NonNull LoggedInUserView model) {
-        String welcome = getString(R.string.login_greet) + " " + model.getDisplayName();
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-    }
-
-    private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+        UpdateLoginButton();
     }
 }
