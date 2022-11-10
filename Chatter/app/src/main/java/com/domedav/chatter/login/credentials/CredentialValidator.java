@@ -1,4 +1,4 @@
-package com.domedav.chatter.ui.login.credentials;
+package com.domedav.chatter.login.credentials;
 
 public class CredentialValidator {
     public static boolean GoodForProceed_Username;

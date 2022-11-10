@@ -10,5 +10,9 @@
     <color name="outlining">#CDFFFFFF</color>
     <color name="outlining_semitransparent">#59FFFFFF</color>
     <color name="semitransparent_background">#59000000</color>
+    <color name="semitransparent_background2">#14000000</color>
     <color name="error">#FF7575</color>
+    <color name="layouttransition_btm">#80003F63</color>
+    <color name="layouttransition_mid">#BF005180</color>
+    <color name="layouttransition_top">@color/main</color>
 </resources>

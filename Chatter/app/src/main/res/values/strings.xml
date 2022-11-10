@@ -4,7 +4,8 @@
     <string name="prompt_username">Username</string>
     <string name="prompt_username_explain">Only characters A-Z are allowed</string>
     <string name="prompt_password">Password</string>
-    <string name="prompt_email">Email/Tel (optional)</string>
+    <string name="prompt_email">Email/Tel</string>
+    <string name="optional"><i>Optional</i></string>
     <string name="action_proceed">Continue</string>
     <string name="action_finish">Register</string>
     <string name="invalid_username_tooshort">Username is too short</string>
@@ -17,6 +18,6 @@
     <string name="login_greet">Welcome!</string>
     <string name="forgot_pass"><u>I Forgot My Password</u></string>
     <string name="login_email_warn_caution">Consider adding valid information, otherwise you wont be able to recover your account if you forget your password.</string>
-    <string name="username_display">Your username is: @%s</string>
+    <string name="username_almostthere">Almost there @%s</string>
     <!--                          -->
 </resources>

@@ -10,7 +10,11 @@
     <color name="outlining">#CD000000</color>
     <color name="outlining_semitransparent">#59000000</color>
     <color name="semitransparent_background">#59FFFFFF</color>
+    <color name="semitransparent_background2">#14FFFFFF</color>
     <color name="error">#B10000</color>
+    <color name="layouttransition_btm">#80008CB6</color>
+    <color name="layouttransition_mid">#BF0094C1</color>
+    <color name="layouttransition_top">@color/main</color>
     <!--          -->
     <color name="main_fixed">#00ACE0</color>
     <color name="black">@android:color/black</color>

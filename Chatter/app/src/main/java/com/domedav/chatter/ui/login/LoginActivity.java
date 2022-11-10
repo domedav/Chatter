@@ -1,14 +1,12 @@
 package com.domedav.chatter.ui.login;
-import android.annotation.SuppressLint;
-import android.content.res.ColorStateList;
+import android.content.res.Configuration;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -16,20 +14,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.domedav.DataManager;
 import com.domedav.chatter.R;
 import com.domedav.chatter.databinding.ActivityLoginBinding;
-import com.domedav.chatter.ui.login.credentials.CredentialValidator;
-import com.google.android.material.textfield.TextInputEditText;
+import com.domedav.chatter.login.credentials.CredentialValidator;
 import com.google.android.material.textfield.TextInputLayout;
 
-import androidx.core.content.ContextCompat;
 import androidx.core.splashscreen.SplashScreen;
-
-import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -38,10 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText usernameEditText;
     EditText passwordEditText;
     Button loginButton;
-
-    private boolean passwordError = true;
-    private boolean usernameError = true;
-
+    Handler mainScreenDelayAnim;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED, WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
@@ -66,11 +57,12 @@ public class LoginActivity extends AppCompatActivity {
                 if(CanUndo)
                 {
                     CanUndo = false;
-                    setContentView(binding.getRoot());
-                    CredentialValidator.GoodForProceed_Username = false;
-                    CredentialValidator.GoodForProceed_Password = false;
-                    usernameEditText.setText(DataManager.GetData_String(getApplicationContext(), "Login", "usernameEditText_restore_data"));
-                    ValidateUsername(binding.userContainer, DataManager.GetData_String(getApplicationContext(), "Login", "usernameEditText_restore_data"));
+                    findViewById(R.id.fade).setBackground(getDrawable(R.drawable.animated_layoutswitch_fadeanim_in));
+                    ((AnimatedVectorDrawable)findViewById(R.id.fade).getBackground()).start();
+                    mainScreenDelayAnim.postDelayed(()->{
+                        setContentView(binding.getRoot());
+                        HandleBackButton();
+                    },250);
                     return;
                 }
                 finish();
@@ -78,8 +70,8 @@ public class LoginActivity extends AppCompatActivity {
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
 
-        usernameEditText.setText(DataManager.GetData_String(this, "Login", "usernameEditText_restore_data"));
-        ValidateUsername(binding.userContainer, DataManager.GetData_String(this, "Login", "usernameEditText_restore_data"));
+        usernameEditText.setText(DataManager.GetData_String(this, "Login", "usernameEditText_previous_data"));
+        ValidateUsername(binding.userContainer, DataManager.GetData_String(this, "Login", "usernameEditText_previous_data"));
         InitEvents();
 
         //anim bg
@@ -87,6 +79,9 @@ public class LoginActivity extends AppCompatActivity {
         animationDrawable.setEnterFadeDuration(0);
         animationDrawable.setExitFadeDuration(6000);
         animationDrawable.start();
+
+        mainScreenDelayAnim = new Handler();
+        mainScreenDelayAnim.postDelayed(() -> {binding.fade.setBackground(getDrawable(R.drawable.animated_layoutswitch_fadeanim_out)); ((AnimatedVectorDrawable)binding.fade.getBackground()).start();}, 250);
     }
 
     private void InitEvents(){
@@ -105,11 +100,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 ValidateUsername(binding.userContainer, s.toString());
-
-                ColorStateList csl = ContextCompat.getColorStateList(getApplicationContext(), usernameError ? R.color.outlining : R.color.error);
-                binding.userContainer.setStartIconTintList(csl);
-                binding.userContainer.setCounterTextColor(csl);
-                binding.userContainer.setEndIconTintList(csl);
             }
         });
 
@@ -126,40 +116,31 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                CredentialValidator.GoodForProceed_Password = CredentialValidator.ValidatePasswordLength(s.toString().length());
-                binding.passContainer.setError(CredentialValidator.GoodForProceed_Password ? null : getString(R.string.invalid_password));
-                passwordError = CredentialValidator.GoodForProceed_Password;
-
-                ColorStateList csl = ContextCompat.getColorStateList(getApplicationContext(), passwordError ? R.color.outlining : R.color.error);
-                binding.passContainer.setStartIconTintList(csl);
-                binding.passContainer.setCounterTextColor(csl);
-                binding.passContainer.setEndIconTintList(csl);
-
-                UpdateLoginButton();
+                ValidatePassword(s.toString());
             }
-        });
-
-        usernameEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            ColorStateList csl = ContextCompat.getColorStateList(getApplicationContext(), usernameError ? (hasFocus ? R.color.outlining : R.color.outlining_semitransparent) : R.color.error);
-            binding.userContainer.setStartIconTintList(csl);
-            binding.userContainer.setCounterTextColor(csl);
-            binding.userContainer.setEndIconTintList(csl);
-        });
-
-        passwordEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            ColorStateList csl = ContextCompat.getColorStateList(getApplicationContext(), passwordError ? (hasFocus ? R.color.outlining : R.color.outlining_semitransparent) : R.color.error);
-            binding.passContainer.setStartIconTintList(csl);
-            binding.passContainer.setCounterTextColor(csl);
-            binding.passContainer.setEndIconTintList(csl);
-            binding.passContainer.setHintTextColor(csl);
         });
 
         loginButton.setOnClickListener(v -> {
             //login
-            setContentView(R.layout.activity_login_email);
-            ((TextView)findViewById(R.id.usernamedisplay)).setText(getString(R.string.username_display, usernameEditText.getText().toString()));
-            CanUndo = true;
-            DataManager.SetData(this, "Login", "usernameEditText_restore_data", usernameEditText.getText().toString());
+            binding.fade.setBackground(getDrawable(R.drawable.animated_layoutswitch_fadeanim_in));
+            ((AnimatedVectorDrawable)binding.fade.getBackground()).start();
+            mainScreenDelayAnim.postDelayed(() ->
+            {
+                setContentView(R.layout.activity_login_email);
+                findViewById(R.id.fade).setBackground(getDrawable(R.drawable.animated_layoutswitch_fadeanim_out));
+                ((AnimatedVectorDrawable)findViewById(R.id.fade).getBackground()).start();
+                ((TextView)findViewById(R.id.usernamedisplay)).setText(getString(R.string.username_almostthere, usernameEditText.getText().toString()));
+                CanUndo = true;
+                DataManager.SetData(this, "Login", "usernameEditText_previous_data", usernameEditText.getText().toString());
+
+                TextInputLayout emailContainer = (TextInputLayout)findViewById(R.id.emailContainer);
+
+                //anim email phone
+                AnimationDrawable animationDrawable = (AnimationDrawable)(emailContainer.getStartIconDrawable());
+                animationDrawable.setEnterFadeDuration(1100);
+                animationDrawable.setExitFadeDuration(650);
+                animationDrawable.start();
+            },250);
         });
     }
 
@@ -168,30 +149,52 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void ValidateUsername(TextInputLayout usernameEditText, String username){
+        if(username.isEmpty()){return;}
         CredentialValidator.LoginUsernameErrorType errorType = CredentialValidator.ValidateUsername(username);
         switch (errorType)
         {
             case username_short:
                 usernameEditText.setError(getString(R.string.invalid_username_tooshort));
                 CredentialValidator.GoodForProceed_Username = false;
-                usernameError = false;
                 break;
             case username_long:
                 usernameEditText.setError(getString(R.string.invalid_username_toolong));
                 CredentialValidator.GoodForProceed_Username = false;
-                usernameError = false;
                 break;
             case username_invalid:
                 usernameEditText.setError(getString(R.string.invalid_username_nonascii));
                 CredentialValidator.GoodForProceed_Username = false;
-                usernameError = false;
                 break;
             case ignore:
                 usernameEditText.setError(null);
                 CredentialValidator.GoodForProceed_Username = true;
-                usernameError = true;
                 break;
         }
         UpdateLoginButton();
+    }
+
+    private void ValidatePassword(String s){
+        CredentialValidator.GoodForProceed_Password = CredentialValidator.ValidatePasswordLength(s.length());
+        binding.passContainer.setError(CredentialValidator.GoodForProceed_Password ? null : getString(R.string.invalid_password));
+
+        UpdateLoginButton();
+    }
+
+    private void HandleBackButton(){
+        binding.fade.setBackground(getDrawable(R.color.layouttransition_top));
+        mainScreenDelayAnim.postDelayed(() -> {binding.fade.setBackground(getDrawable(R.drawable.animated_layoutswitch_fadeanim_out)); ((AnimatedVectorDrawable)binding.fade.getBackground()).start();}, 250);
+        CredentialValidator.GoodForProceed_Username = false;
+        CredentialValidator.GoodForProceed_Password = false;
+        usernameEditText.setText(DataManager.GetData_String(getApplicationContext(), "Login", "usernameEditText_previous_data"));
+        ValidateUsername(binding.userContainer, DataManager.GetData_String(getApplicationContext(), "Login", "usernameEditText_previous_data"));
+        ValidatePassword(binding.password.toString());
+        UpdateLoginButton();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.e("TAG", "onConfigurationChanged: " + newConfig.toString());
+        HandleBackButton();
     }
 }

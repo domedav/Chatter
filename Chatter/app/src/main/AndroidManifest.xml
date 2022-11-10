@@ -14,7 +14,10 @@
         tools:targetApi="33">
         <activity
             android:name=".ui.login.LoginActivity"
-            android:exported="true">
+            android:configChanges="orientation|screenSize|colorMode|keyboardHidden"
+            android:screenOrientation="sensorPortrait"
+            android:exported="true"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

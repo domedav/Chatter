@@ -41,6 +41,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:startIconDrawable="@drawable/ic_twotone_person"
+        app:helperText=" "
         app:endIconMode="none"
         app:counterEnabled="true"
         app:counterMaxLength="24">
@@ -68,6 +69,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userContainer"
         app:startIconDrawable="@drawable/ic_twotone_password"
+        app:helperText=" "
         app:endIconMode="password_toggle">
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/password"
@@ -81,37 +83,37 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
+        style="@style/Button.Outlined"
         android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
+        android:minWidth="185dp"
         android:enabled="false"
-        android:minWidth="175dp"
         android:text="@string/action_proceed"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passContainer" />
 
     <Button
+        style="@style/Button.TextOnly"
         android:id="@+id/passforgot"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/transparent"
-        android:gravity="center"
+        android:layout_marginTop="20dp"
         android:text="@string/forgot_pass"
         android:textColor="@color/green"
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login"
-        tools:ignore="TextContrastCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/login" />
 
+    <View
+        android:id="@+id/fade"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/layouttransition_top"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

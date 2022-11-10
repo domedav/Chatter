@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24">
+            <group
+                android:name="BottomSquare">
+                <path
+                    android:fillColor="@color/layouttransition_btm"
+                    android:name="bottomsquare"
+                    android:pathData="M0,0h24v24h-24z"/>
+            </group>
+            <group
+                android:name="MidSquare">
+                <path
+                    android:fillColor="@color/layouttransition_mid"
+                    android:name="midsquare"
+                    android:pathData="M0,0h24v24h-24z"/>
+            </group>
+            <group
+                android:name="TopSquare">
+                <path
+                    android:fillColor="@color/layouttransition_top"
+                    android:name="topsquare"
+                    android:pathData="M0,0h24v24h-24z"/>
+            </group>
+        </vector>
+    </aapt:attr>
+    <target
+        android:name="bottomsquare">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="250"
+                    android:interpolator="@android:interpolator/accelerate_decelerate"
+                    android:propertyName="pathData"
+                    android:valueFrom="M0,0h24v0h-24z"
+                    android:valueTo="M0,0h24v24h-24z"
+                    android:valueType="pathType"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target
+        android:name="midsquare">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="305"
+                    android:interpolator="@android:interpolator/accelerate_decelerate"
+                    android:propertyName="pathData"
+                    android:valueFrom="M0,0h24v0h-24z"
+                    android:valueTo="M0,0h24v24h-24z"
+                    android:valueType="pathType"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target
+        android:name="topsquare">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="400"
+                    android:interpolator="@android:interpolator/accelerate_decelerate"
+                    android:propertyName="pathData"
+                    android:valueFrom="M0,0h24v0h-24z"
+                    android:valueTo="M0,0h24v24h-24z"
+                    android:valueType="pathType"/>
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>
